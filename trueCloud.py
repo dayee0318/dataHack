@@ -13,12 +13,13 @@ df = pd.read_csv('DataSet_Misinfo_TRUE.csv')
 
 # Download stopwords and punkt tokenizer from NLTK
 nltk.download('stopwords')  # Common words without meaning
-nltk.download('averaged_perceptron_tagger') # part of speech tag
-nltk.download('punkt') # punctuation tokenizer
+nltk.download('averaged_perceptron_tagger')  # part of speech tag
+nltk.download('punkt')  # punctuation tokenizer
 
 # Define stopwords and punctuation to remove from the text
 stop_words = set(stopwords.words('english'))
 punct = set(punctuation)
+
 
 # Function to preprocess the text
 def preprocess_text(text):
@@ -33,6 +34,7 @@ def preprocess_text(text):
         # Return an empty string for missing values
         return ''
 
+
 # Apply the preprocessing function to the text column
 df['text'] = df['text'].apply(preprocess_text)
 
@@ -46,13 +48,15 @@ df['sentiment'] = df['text'].apply(lambda x: TextBlob(x).sentiment.polarity)
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
 
+
 def get_entities(text):
     chunks = ne_chunk(pos_tag(word_tokenize(text)))
     entities = []
     for chunk in chunks:
         if hasattr(chunk, 'label'):
             entities.append(' '.join(c[0] for c in chunk))
-    return entities
+        return entities
+
 
 df['entities'] = df['text'].apply(get_entities)
 
@@ -63,16 +67,32 @@ wordcloud = WordCloud(width=800, height=800, background_color='white').generate(
 # Get the 50 most frequent words and their frequencies
 word_freq = sorted(wordcloud.process_text(text).items(), key=lambda x: x[1], reverse=True)[:50]
 
-# Convert the list of tuples to a pandas dataframe
-df_freq = pd.DataFrame(word_freq, columns=['word', 'freq'])
+# Create a dictionary to store the frequency total and number of article for each word
+freq_dict = {}
+article_dict = {}
+
+for word, freq in word_freq:
+    freq_dict[word] = freq
+    article_dict[word] = len(df[df['text'].str.contains(word)])
+
+# Convert the dictionaries to pandas dataframes
+df_freq = pd.DataFrame(list(freq_dict.items()), columns=['word', 'freq'])
+df_article = pd.DataFrame(list(article_dict.items()), columns=['word', 'article_count'])
+
+# Merge the dataframes on the 'word' column
+df_result = pd.merge(df_freq, df_article, on='word')
+
+# Calculate the rank based on the word frequency
+df_result['rank'] = df_result['freq'].rank(ascending=False)
+
+# Create a CSV file with the data
+df_result.to_csv('trueData.csv', index=False)
 
 # Print the results
 print('50 most frequent words in the text:\n')
-print(df_freq)
-
+print(df_result[['rank', 'word', 'freq', 'article_count']].head(50))
 
 # Plot the word cloud
 plt.imshow(wordcloud, interpolation='bilinear')
 plt.axis('off')
 plt.show()
-

@@ -64,8 +64,26 @@ wordcloud.generate(text)
 # Get the 50 most frequent words and their frequencies
 word_freq = sorted(wordcloud.process_text(text).items(), key=lambda x: x[1], reverse=True)[:50]
 
-# Convert the list of tuples to a pandas dataframe
-df_freq = pd.DataFrame(word_freq, columns=['word', 'freq'])
+# Create a dictionary to store the frequency total and number of article for each word
+freq_dict = {}
+article_dict = {}
+
+for word, freq in word_freq:
+    freq_dict[word] = freq
+    article_dict[word] = len(df[df['text'].str.contains(word)])
+
+# Convert the dictionaries to pandas dataframes
+df_freq = pd.DataFrame(list(freq_dict.items()), columns=['word', 'freq'])
+df_article = pd.DataFrame(list(article_dict.items()), columns=['word', 'article_count'])
+
+# Merge the dataframes on the 'word' column
+df_result = pd.merge(df_freq, df_article, on='word')
+
+# Calculate the rank based on the word frequency
+df_result['rank'] = df_result['freq'].rank(ascending=False)
+
+# Create a CSV file with the data
+df_result.to_csv('trueData.csv', index=False)
 
 # Print the results
 print('50 most frequent words in the text:\n')
