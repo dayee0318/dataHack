@@ -62,8 +62,8 @@ text = ' '.join(df['text'])
 wordcloud = WordCloud(width=800, height=800, background_color='white')
 wordcloud.generate(text)
 
-# Get the 100 most frequent words and their frequencies
-word_freq = sorted(wordcloud.process_text(text).items(), key=lambda x: x[1], reverse=True)[:100]
+# Get the 500 most frequent words and their frequencies
+word_freq = sorted(wordcloud.process_text(text).items(), key=lambda x: x[1], reverse=True)[:500]
 
 # Create a dictionary to store the frequency total and number of article for each word
 freq_dict = {}
@@ -85,19 +85,16 @@ df_result['rank'] = df_result['freq'].rank(ascending=False)
 
 # Create a CSV file with the data
 os.makedirs('result', exist_ok=True)
-most_freq_file = os.path.join('result', 'fakeData_Most.csv')
+most_freq_file = os.path.join('result', 'fakeData.csv')
 
 df_result.to_csv(most_freq_file, index=False)
 
 # Print the results
 print('100 most frequent words in the text:\n')
-print(df_result[['rank', 'word', 'freq', 'article_count']].head(100))
+print(df_result[['rank', 'word', 'freq', 'article_count']].head(500))
 
 # Plot the word cloud
 plt.imshow(wordcloud, interpolation='bilinear')
 plt.axis('off')
 plt.show()
 
-# Print the results
-print('100 most frequent words in the text:\n')
-print(df_result[['rank', 'word', 'freq', 'article_count']].head(100))
