@@ -1,6 +1,5 @@
 # Data Analysis Hackathon Project 👩‍💻
 ## Analyzing Misinformation in News using NLP and Data Visualization
-```Unveiling the Truth: Analyzing Misinformation using NLP and Machine Learning ```
 
 This project was created for the CANIS Data Analysis Hackathon. The task was to create compelling data visualizations that would help others understand the survey results in a meaningful way. The dataset used in this project is available on Kaggle through this [link](https://www.kaggle.com/datasets/stevenpeutz/misinformation-fake-news-text-dataset-79k?resource=download)
 
