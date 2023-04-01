@@ -62,7 +62,7 @@ wordcloud = WordCloud(width=800, height=800, background_color='white')
 wordcloud.generate(text)
 
 # Get the 50 most frequent words and their frequencies
-word_freq = sorted(wordcloud.process_text(text).items(), key=lambda x: x[1], reverse=True)[:50]
+word_freq = sorted(wordcloud.process_text(text).items(), key=lambda x: x[1], reverse=True)[:100]
 
 # Create a dictionary to store the frequency total and number of article for each word
 freq_dict = {}
@@ -93,3 +93,33 @@ print(df_freq)
 plt.imshow(wordcloud, interpolation='bilinear')
 plt.axis('off')
 plt.show()
+
+# Get the 50 least frequent words and their frequencies
+least_word_freq = sorted(wordcloud.process_text(text).items(), key=lambda x: x[1])[:100]
+
+# Create a dictionary to store the frequency total and number of article for each word
+least_freq_dict = {}
+least_article_dict = {}
+
+for word, freq in least_word_freq:
+    least_freq_dict[word] = freq
+    least_article_dict[word] = len(df[df['text'].str.contains(word)])
+
+# Convert the dictionaries to pandas dataframes
+df_least_freq = pd.DataFrame(list(least_freq_dict.items()), columns=['word', 'freq'])
+df_least_article = pd.DataFrame(list(least_article_dict.items()), columns=['word', 'article_count'])
+
+# Merge the dataframes on the 'word' column
+df_least_result = pd.merge(df_least_freq, df_least_article, on='word')
+
+# Calculate the rank based on the word frequency
+df_least_result['rank'] = df_least_result['freq'].rank()
+
+# Create a CSV file with the data
+with pd.ExcelWriter('trueData.xlsx') as writer:
+    df_result.to_excel(writer, sheet_name='trueData_most', index=False)
+    df_least_result.to_excel(writer, sheet_name='trueData_least', index=False)
+
+# Print the results
+print('\n50 least frequent words in the text:\n')
+print(df_least_freq)
