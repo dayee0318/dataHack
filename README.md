@@ -7,7 +7,9 @@ This project was created for the CANIS Data Analysis Hackathon. The task was to 
 > https://dayee0318.github.io/about.html
 
 ## Project Purpose ⛳
-The purpose of this project is to analyze the dataset and create data visualizations that help to illustrate the findings in an understandable and meaningful way.
+The purpose of this project is to analyze a dataset of news articles and identify the words that are most frequently used in true and fake news. Our goal is to gain insights into the language patterns that are associated with fake news and to develop techniques for detecting and combating misinformation.  
+To achieve this, we will perform data analysis and NLP techniques on the dataset, extract meaningful insights, and create data visualizations to present our findings in an understandable and meaningful way.  
+By identifying the key language features of fake news, we hope to contribute to the development of more effective strategies for combating the spread of misinformation and promoting the dissemination of accurate and reliable information.
 
 ## Project Overview 👓
 The project involves data analysis of the misinformation fake news text dataset. The project includes the following steps:
