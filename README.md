@@ -18,6 +18,9 @@ The project involves data analysis of the misinformation fake news text dataset.
 3. Identifying and removing stop words and other irrelevant information from the dataset.
 4. Visualizing the results of the analysis using various tools, such as charts, graphs, and interactive dashboards, to make the insights more understandable and accessible to users.
 5. Developing a web-based platform to present the findings of the analysis and enable users to interact with the data and explore the results in more detail.
+6. Uused advanced techniques and R code to analyze the data and identify patterns that could distinguish between fake and true news.
+7. Created Fake News Detector, by collected all possible word sets that were likely to be associated with fake news.
+
 
 ## Contributors 🙌
 
